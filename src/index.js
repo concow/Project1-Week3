@@ -10,16 +10,16 @@ function renderBooks(book) {
 
     //Creating HTML elements and assigning variables to our API Properties
     //id, title, author, genre, image & price
-    const bookTitle = document.createElement("h4");
+    const bookTitle = document.createElement("h3");
     bookTitle.innerText = book.title;
 
-    const bookAuthor = document.createElement("h5");
+    const bookAuthor = document.createElement("h4");
     bookAuthor.innerText = book.author;
 
-    const bookGenre = document.createElement("h6");
+    const bookGenre = document.createElement("h5");
     bookGenre.innerText = book.genre
 
-    const bookPrice = document.createElement("h5");
+    const bookPrice = document.createElement("h4");
     bookPrice.innerText = `$${book.price}`;
 
     const bookCover = document.createElement("img");
