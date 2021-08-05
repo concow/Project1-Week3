@@ -1,3 +1,4 @@
+//OG
 const bookForm = document.getElementById("book-form");
 const bookContainer = document.getElementById("book-container");
 
@@ -8,7 +9,7 @@ function renderBooks(book) {
     bookCard.id = `book-${book.id}`;
     bookCard.className = "book-card";
 
-    //Creating HTML elements and assigning variables to our API Properties
+    //Creating HTML elements an assigning variables to our API Properties
     //id, title, author, genre, image & price
     const bookTitle = document.createElement("h4");
     bookTitle.innerText = book.title;
@@ -27,6 +28,11 @@ function renderBooks(book) {
     bookCover.alt = `${book.title} image`;
 
     //Instantiating likes, delete for user events
+    const likeButton = document.createElement("button");
+    likeButton.className = "like-button";
+    likeButton.innerText = "♥";
+    likeButton.addEventListener("click", increaseLike);
+
     const bookLikes = document.createElement("h6");
     bookLikes.innerText = "Likes: ";
 
@@ -34,26 +40,14 @@ function renderBooks(book) {
     likesNumber.className = "like-num";
     likesNumber.textContent = book.likes;
 
-    const likeButton = document.createElement("button");
-    likeButton.className = "like-button";
-    likeButton.innerText = "♥";
-    likeButton.addEventListener("click", increaseLike);
-
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button";
     deleteButton.innerText = "Delete";
-    deleteButton.addEventListener("click", () => deleteBook(book));
+    deleteButton.addEventListener("click", () => deleteBook(book))
 
-    //Order in which you call matters
     bookCard.append(bookCover, bookTitle, bookAuthor, bookGenre,
         bookPrice, bookLikes, likesNumber, likeButton, deleteButton);
-    
     bookContainer.appendChild(bookCard);
-}
-
-function increaseLike(event) {
-    const likesElement = event.target.previousElementSibling;
-    likesElement.innerText = parseInt(likesElement.innerText) + 1;
 }
 
 function addBook(event) {
@@ -67,7 +61,7 @@ function addBook(event) {
 
     if (bookTitle !== "" && bookAuthor !== "" && bookGenre !== "" && bookPrice !== ""
         && bookImage !== "") {
-        const bookObj = {
+        const book = {
             //id: server auto increments id
             title: bookTitle,
             author: bookAuthor,
@@ -76,29 +70,29 @@ function addBook(event) {
             likes: 0,
             image: bookImage,
         };
-        renderBooks(bookObj);
-        postBook(bookObj);
-        bookForm.reset(); //clearing the form after submission
+
+        const configObj = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(book),
+        }
+
+        fetch('http://localhost:3000/books', configObj)
+            .then(resp => resp.json())
+            // .then(books => renderBook(book))
+            .then(renderBooks)
+        bookForm.reset(); //clearing the form
     } else {
-        alert("Form is incomplete");
+        alert("Form Empty");
     }
 }
 
-function postBook(bookObj) {
-    fetch('http://localhost:3000/books', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bookObj)
-    })
-}
-
-function getBooks() {
-    fetch('http://localhost:3000/books')
-        .then((resp) => resp.json())
-        .then((bookData) => bookData.forEach((book) => renderBooks(book)));
-        //.then((bookData) => renderBooks(bookData));
+function increaseLike(event) {
+    const likesElement = event.target.previousElementSibling;
+    console.log(likesElement)
+    likesElement.innerText = parseInt(likesElement.innerText) + 1;
 }
 
 function deleteBook(book) {
@@ -109,6 +103,14 @@ function deleteBook(book) {
             'Content-type': 'application/json'
         }
     })
+    // .then((res) => res.json())
+    // .then((data) => console.log(data))
+}
+function getBooks() {
+    fetch('http://localhost:3000/books')
+        .then((res) => res.json())
+        .then((bookData) => bookData.forEach((book) => renderBooks(book)));
+    //.then((bookData) => renderBooks(bookData));
 }
 
 function init() {
@@ -117,3 +119,4 @@ function init() {
 }
 
 init();
+

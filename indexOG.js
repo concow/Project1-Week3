@@ -27,17 +27,17 @@ function renderBooks(book) {
     bookCover.alt = `${book.title} image`;
 
     //Instantiating likes, delete for user events
+    const likeButton = document.createElement("button");
+    likeButton.className = "like-button";
+    likeButton.innerText = "♥";
+    likeButton.addEventListener("click", increaseLike);
+
     const bookLikes = document.createElement("h6");
     bookLikes.innerText = "Likes: ";
 
     const likesNumber = document.createElement("h5");
     likesNumber.className = "like-num";
     likesNumber.textContent = book.likes;
-
-    const likeButton = document.createElement("button");
-    likeButton.className = "like-button";
-    likeButton.innerText = "♥";
-    likeButton.addEventListener("click", increaseLike);
 
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button";
@@ -47,13 +47,25 @@ function renderBooks(book) {
     //Order in which you call matters
     bookCard.append(bookCover, bookTitle, bookAuthor, bookGenre,
         bookPrice, bookLikes, likesNumber, likeButton, deleteButton);
-    
     bookContainer.appendChild(bookCard);
 }
 
 function increaseLike(event) {
     const likesElement = event.target.previousElementSibling;
+    //console.log(likesElement)
     likesElement.innerText = parseInt(likesElement.innerText) + 1;
+}
+
+function deleteBook(book) {
+    document.getElementById(`book-${book.id}`).remove()
+    fetch(`http://localhost:3000/books/${book.id}`, {
+        method: "DELETE",
+        // headers: {
+        //     'Content-type': 'application/json'
+        // }
+    })
+    // .then((res) => res.json())
+    // .then((data) => console.log(data))
 }
 
 function addBook(event) {
@@ -78,9 +90,9 @@ function addBook(event) {
         };
         renderBooks(bookObj);
         postBook(bookObj);
-        bookForm.reset(); //clearing the form after submission
+        bookForm.reset(); //clearing the form
     } else {
-        alert("Form is incomplete");
+        alert("Form is Empty");
     }
 }
 
@@ -94,21 +106,12 @@ function postBook(bookObj) {
     })
 }
 
+
 function getBooks() {
     fetch('http://localhost:3000/books')
-        .then((resp) => resp.json())
+        .then((res) => res.json())
         .then((bookData) => bookData.forEach((book) => renderBooks(book)));
-        //.then((bookData) => renderBooks(bookData));
-}
-
-function deleteBook(book) {
-    document.getElementById(`book-${book.id}`).remove()
-    fetch(`http://localhost:3000/books/${book.id}`, {
-        method: "DELETE",
-        headers: {
-            'Content-type': 'application/json'
-        }
-    })
+    //.then((bookData) => renderBooks(bookData));
 }
 
 function init() {
@@ -117,3 +120,4 @@ function init() {
 }
 
 init();
+
