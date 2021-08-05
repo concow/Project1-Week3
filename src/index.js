@@ -13,13 +13,13 @@ const bookContainer = document.getElementById("book-container");
     const bookTitle = document.createElement("h4");
     bookTitle.innerText = book.title;
 
-    const bookAuthor = document.createElement("h6");
+    const bookAuthor = document.createElement("h5");
     bookAuthor.innerText = book.author;
  
     const bookGenre = document.createElement("h6");
     bookGenre.innerText = book.genre
 
-    const bookPrice = document.createElement("h6");
+    const bookPrice = document.createElement("h5");
     bookPrice.innerText = `$${book.price}`;
 
     const bookCover = document.createElement("img");
@@ -32,7 +32,7 @@ const bookContainer = document.getElementById("book-container");
     likeButton.innerText = "♥";
     likeButton.addEventListener("click", increaseLike);
     
-    const bookLikes = document.createElement("h5");
+    const bookLikes = document.createElement("h6");
     bookLikes.innerText = "Likes: ";
 
     const likesNumber = document.createElement("h5");
@@ -42,6 +42,7 @@ const bookContainer = document.getElementById("book-container");
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button";
     deleteButton.innerText = "Delete";
+    deleteButton.addEventListener("click", () => deleteBook(book))
     
     bookCard.append(bookCover, bookTitle, bookAuthor, bookGenre, bookPrice, bookLikes, likesNumber, likeButton, deleteButton);
     bookContainer.appendChild(bookCard);
@@ -53,11 +54,12 @@ function increaseLike(event) {
     likesElement.innerText = parseInt(likesElement.innerText) + 1;
 }
 
-function deleteBook() {
-    card.querySelector('#delete').addEventListener('click', (e) => {
-        card.remove()
-        deletePet(pet.id)
-    })
+function deleteBook(book) {
+    document.getElementById(`book-${book.id}`).remove()
+    fetch(`http://localhost:3000/books/${book.id}`, { method:
+        "DELETE"})
+    .then((res) => res.json())
+    .then((data) => console.log(data))
 }
 
 function addBook(event) {
@@ -72,14 +74,13 @@ function addBook(event) {
     if (bookTitle !== "" && bookAuthor !== "" && bookGenre !=="" && bookPrice !== "" 
             && bookImage !== "") {
         const book = {
-            id: 17,
+            //id: 17,
             title: bookTitle,
             author: bookAuthor,
             genre: bookGenre,
             price: bookPrice,
             likes: 0,
             image: bookImage,
-            //likes: 0,
         };
 
         const configObj = {
@@ -99,6 +100,14 @@ function addBook(event) {
         alert("Form Empty");
     }
 }
+
+// function refactorIt() {
+//     fetch('http://localhost:3000/books', configObj)
+//         .then(resp => resp.json())
+//         // .then(books => renderBook(book))
+//         .then(renderBooks)
+//     bookForm.reset(); //clearing the form
+// }
 function getBooks() {
     fetch('http://localhost:3000/books')
         .then((res) => res.json())

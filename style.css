@@ -29,6 +29,7 @@ img {
 .book-card {
   border: solid;
   border-color: #ff8f05;
+  background-color: rgb(205, 170, 170)f05;
   padding: 100px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -41,7 +42,7 @@ img {
 }
 
 .book-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(218, 31, 31, 0.685);
+  box-shadow: 0 8px 50px 0 rgba(218, 31, 31, 0.685);
 }
 
 #book-container {
@@ -59,7 +60,7 @@ input[type="text"]:not(.edit-input) {
 }
 
 input[type="submit"] {
-  background-color: #04aa6d;
+  background-color: #02c6f2;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -75,6 +76,10 @@ input[type="submit"]:hover {
 
 label {
   color: rgb(83, 79, 79);
+}
+.like-button:hover {
+  color: red;
+  background-color: white;
 }
 
 /* #book-form {
