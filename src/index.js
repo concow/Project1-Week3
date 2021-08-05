@@ -53,6 +53,13 @@ function increaseLike(event) {
     likesElement.innerText = parseInt(likesElement.innerText) + 1;
 }
 
+function deleteBook() {
+    card.querySelector('#delete').addEventListener('click', (e) => {
+        card.remove()
+        deletePet(pet.id)
+    })
+}
+
 function addBook(event) {
     event.preventDefault();
     const bookForm = event.target;
@@ -65,10 +72,12 @@ function addBook(event) {
     if (bookTitle !== "" && bookAuthor !== "" && bookGenre !=="" && bookPrice !== "" 
             && bookImage !== "") {
         const book = {
+            id: 17,
             title: bookTitle,
             author: bookAuthor,
             genre: bookGenre,
             price: bookPrice,
+            likes: 0,
             image: bookImage,
             //likes: 0,
         };
@@ -81,9 +90,9 @@ function addBook(event) {
             body: JSON.stringify(book),
         }
 
-        fetch('http://localhost:3000/pokemons', configObj)
+        fetch('http://localhost:3000/books', configObj)
             .then(resp => resp.json())
-            // .then(pokemon => renderPoke(pokemon))
+            // .then(books => renderBook(book))
             .then(renderBooks)
         bookForm.reset(); //clearing the form
     } else {
